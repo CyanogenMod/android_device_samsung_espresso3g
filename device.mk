@@ -15,15 +15,14 @@
 #
 
 # Include espresso-common makefile
-$(call inherit-product, device/samsung/espresso-common/espresso-common.mk)
+$(call inherit-product, device/samsung/espresso/espresso-common.mk)
 
-LOCAL_PATH := device/samsung/p5100
-
+# Include 3g overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay/aosp
 
 # Audio
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/audio_policy.conf:system/etc/audio_policy.conf
+    device/samsung/espresso3g/configs/audio_policy.conf:system/etc/audio_policy.conf
 
 # Packages
 PRODUCT_PACKAGES += \
@@ -40,5 +39,4 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml
 
 # Use the non-open-source parts, if they're present
-$(call inherit-product-if-exists, vendor/samsung/p51xx/p5100-vendor.mk)
-$(call inherit-product-if-exists, vendor/samsung/p51xx/p51xx-vendor.mk)
+$(call inherit-product-if-exists, vendor/samsung/espresso3g/espresso3g-vendor.mk)

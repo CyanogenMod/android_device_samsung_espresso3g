@@ -15,12 +15,10 @@
 #
 
 # Include common espresso BoardConfig
--include device/samsung/espresso-common/BoardConfigCommon.mk
-
-TARGET_BOARD_INFO_FILE := device/samsung/p5100/board-info.txt
+include device/samsung/espresso/BoardConfigCommon.mk
 
 # assert
-TARGET_OTA_ASSERT_DEVICE := espresso,p5100,GT-P5100,espresso10rf,espresso10rfxx
+TARGET_OTA_ASSERT_DEVICE := espresso,p3100,GT-P3100,espressorf,espressorfxx,p5100,GT-P5100,espresso10rf,espresso10rfxx
 
 # Use the non-open-source parts, if they're present
--include vendor/samsung/p51xx/BoardConfigVendor.mk
+-include vendor/samsung/espresso3g/BoardConfigVendor.mk
