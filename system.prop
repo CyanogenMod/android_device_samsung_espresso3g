@@ -1,5 +1,5 @@
 #
-# system.prop for espresso10
+# system.prop for espresso3g
 #
 rild.libpath=/system/lib/libsec-ril.so
 rild.libargs=-d /dev/ttys0

@@ -14,27 +14,19 @@
 # limitations under the License.
 #
 
-# Release name
-PRODUCT_RELEASE_NAME := p5100
-
 # Boot animation
-TARGET_SCREEN_HEIGHT := 800
-TARGET_SCREEN_WIDTH := 1280
+TARGET_SCREEN_HEIGHT := 1024
+TARGET_SCREEN_WIDTH := 600
 
 # Inherit common CM configuration
 $(call inherit-product, vendor/cm/config/common_full_phone.mk)
 
 # CyanogenMod specific overlay
-DEVICE_PACKAGE_OVERLAYS += device/samsung/p5100/overlay/cm
-DEVICE_PACKAGE_OVERLAYS += device/samsung/espresso-common/overlay/cm-common
+DEVICE_PACKAGE_OVERLAYS += device/samsung/espresso3g/overlay/cm
+DEVICE_PACKAGE_OVERLAYS += device/samsung/espresso/overlay/cm-common
 
 # Inherit device specific configuration
-$(call inherit-product, device/samsung/p5100/aosp_p5100.mk)
+$(call inherit-product, device/samsung/espresso/aosp_espresso3g.mk)
 
 # Device identifier. This must come after all inclusions
-PRODUCT_NAME := cm_p5100
-
-# Set build fingerprint / ID / Product Name etc.
-PRODUCT_BUILD_PROP_OVERRIDES += \
-    BUILD_FINGERPRINT="samsung/espresso10rfxx/espresso10rf:4.2.2/JDQ39/P5100XXDNA1:user/release-keys" \
-    PRIVATE_BUILD_DESC="espresso10rfxx-user 4.2.2 JDQ39 P5100XXDNA1 release-keys"
+PRODUCT_NAME := cm_espresso3g
