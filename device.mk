@@ -15,15 +15,14 @@
 #
 
 # Include espresso-common makefile
-$(call inherit-product, device/samsung/espresso-common/espresso-common.mk)
+$(call inherit-product, device/samsung/espresso/espresso-common.mk)
 
-LOCAL_PATH := device/samsung/p5100
-
+# Include 3g overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay/aosp
 
 # Audio
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/audio_policy.conf:system/etc/audio_policy.conf
+    device/samsung/espresso3g/configs/audio_policy.conf:system/etc/audio_policy.conf
 
 # Packages
 PRODUCT_PACKAGES += \
