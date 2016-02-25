@@ -19,9 +19,11 @@ $(call inherit-product, device/samsung/espresso/espresso-common.mk)
 
 DEVICE_PACKAGE_OVERLAYS += device/samsung/espresso3g/overlay/aosp
 
-# Audio
+# Audio configs
 PRODUCT_COPY_FILES += \
-    device/samsung/espresso3g/configs/audio_policy.conf:system/etc/audio_policy.conf
+    device/samsung/espresso3g/audio/audio_policy.conf:system/etc/audio_policy.conf \
+    device/samsung/espresso3g/audio/tiny_hw_espresso.xml:system/etc/sound/espresso \
+    device/samsung/espresso3g/audio/tiny_hw_espresso10.xml:system/etc/sound/espresso10
 
 # Packages
 PRODUCT_PACKAGES += \
