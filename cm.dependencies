@@ -1,7 +1,7 @@
 [
     {
-        "repository": "android_device_samsung_espresso-common",
-        "target_path": "device/samsung/espresso-common"
+        "repository": "android_device_samsung_espresso",
+        "target_path": "device/samsung/espresso"
     },
     {
         "repository": "android_hardware_samsung",
