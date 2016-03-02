@@ -26,7 +26,7 @@ DEVICE_PACKAGE_OVERLAYS += device/samsung/espresso3g/overlay/cm
 DEVICE_PACKAGE_OVERLAYS += device/samsung/espresso/overlay/cm-common
 
 # Inherit device specific configuration
-$(call inherit-product, device/samsung/espresso/aosp_espresso3g.mk)
+$(call inherit-product, device/samsung/espresso3g/aosp_espresso3g.mk)
 
 # Device identifier. This must come after all inclusions
 PRODUCT_NAME := cm_espresso3g
