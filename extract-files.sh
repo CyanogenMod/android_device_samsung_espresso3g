@@ -31,4 +31,4 @@ done
 
 ./setup-makefiles.sh
 
-./../../../device/samsung/espresso-common/extract-files.sh
+./../../../device/samsung/espressowifi/extract-files.sh

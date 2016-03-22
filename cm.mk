@@ -23,7 +23,7 @@ $(call inherit-product, vendor/cm/config/common_full_phone.mk)
 
 # CyanogenMod specific overlay
 DEVICE_PACKAGE_OVERLAYS += device/samsung/espresso3g/overlay/cm
-DEVICE_PACKAGE_OVERLAYS += device/samsung/espresso/overlay/cm-common
+DEVICE_PACKAGE_OVERLAYS += device/samsung/espressowifi/overlay/cm-common
 
 # Inherit device specific configuration
 $(call inherit-product, device/samsung/espresso3g/aosp_espresso3g.mk)

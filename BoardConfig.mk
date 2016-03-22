@@ -15,7 +15,7 @@
 #
 
 # Include common espresso BoardConfig
--include device/samsung/espresso/BoardConfigCommon.mk
+-include device/samsung/espressowifi/BoardConfigCommon.mk
 
 TARGET_SPECIFIC_HEADER_PATH += device/samsung/espresso3g/include
 
@@ -25,4 +25,4 @@ BOARD_PROVIDES_LIBRIL := true
 BOARD_MODEM_TYPE := xmm6260
 
 # assert
-TARGET_OTA_ASSERT_DEVICE := espresso,p3100,GT-P3100,espressorf,espressorfxx,p5100,GT-P5100,espresso10rf,espresso10rfxx
+TARGET_OTA_ASSERT_DEVICE := espresso-common,p3100,GT-P3100,espressorf,espressorfxx,p5100,GT-P5100,espresso10rf,espresso10rfxx
