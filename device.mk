@@ -15,7 +15,7 @@
 #
 
 # Include espresso-common makefile
-$(call inherit-product, device/samsung/espresso/espresso-common.mk)
+$(call inherit-product, device/samsung/espressowifi/espresso-common.mk)
 
 # Include 3g overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay/aosp
