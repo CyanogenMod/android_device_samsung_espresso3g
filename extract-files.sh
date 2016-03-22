@@ -104,4 +104,4 @@ EOF
 
 EOF
 
-./../espresso/extract-files.sh
+./../espressowifi/extract-files.sh
