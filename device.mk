@@ -26,18 +26,14 @@ PRODUCT_COPY_FILES += \
     device/samsung/espresso3g/audio/tiny_hw_espresso.xml:system/etc/sound/espresso \
     device/samsung/espresso3g/audio/tiny_hw_espresso10.xml:system/etc/sound/espresso10
 
-# Packages
-PRODUCT_PACKAGES += \
-    SamsungServiceMode
-
 # RIL
+PRODUCT_PACKAGES += \
+    libsecril-client \
+    libsecril-compat
+
 PRODUCT_PROPERTY_OVERRIDES += \
     mobiledata.interfaces=pdp0,wlan0,gprs,ppp0 \
     ro.telephony.ril_class=SamsungOmap4RIL
-
-PRODUCT_PACKAGES += \
-    libsamsung_symbols \
-    libsecril-client
 
 # These are the hardware-specific features
 PRODUCT_COPY_FILES += \
