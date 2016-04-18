@@ -1,0 +1,2 @@
+type cbd_device, dev_type;
+type radio_data, file_type;

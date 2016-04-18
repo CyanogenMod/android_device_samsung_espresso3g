@@ -1,0 +1,4 @@
+allow rild system_file:file execmod;
+allow rild radio_data:dir { search write remove_name getattr setattr add_name};
+allow rild radio_data:file { getattr read write open setattr unlink create };
+allow rild storage_file:dir search;
