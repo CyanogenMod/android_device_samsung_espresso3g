@@ -22,7 +22,7 @@
 
 LOCAL_PATH := $(call my-dir)
 
-ifneq ($(filter p5100 p5110,$(TARGET_DEVICE)),)
+ifeq ($(TARGET_DEVICE),espresso3g)
 
 include $(call all-makefiles-under,$(LOCAL_PATH))
 
