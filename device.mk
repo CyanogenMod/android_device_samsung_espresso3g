@@ -15,28 +15,26 @@
 #
 
 # Include espresso-common makefile
-$(call inherit-product, device/samsung/espressowifi/espresso-common.mk)
+$(call inherit-product, device/samsung/espressowifi/device-common.mk)
+
+LOCAL_PATH := device/samsung/espresso3g
 
 # Include 3g overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay/aosp
 
 # Audio configs
 PRODUCT_COPY_FILES += \
-    device/samsung/espresso3g/audio/audio_policy.conf:system/etc/audio_policy.conf \
-    device/samsung/espresso3g/audio/tiny_hw_espresso.xml:system/etc/sound/espresso \
-    device/samsung/espresso3g/audio/tiny_hw_espresso10.xml:system/etc/sound/espresso10
-
-# Packages
-PRODUCT_PACKAGES += \
-    SamsungServiceMode
+    $(LOCAL_PATH)/audio/audio_policy.conf:system/etc/audio_policy.conf \
+    $(LOCAL_PATH)/audio/tiny_hw_espresso.xml:system/etc/sound/espresso \
+    $(LOCAL_PATH)/audio/tiny_hw_espresso10.xml:system/etc/sound/espresso10
 
 # RIL
+PRODUCT_PACKAGES += \
+    libsecril-client
+
 PRODUCT_PROPERTY_OVERRIDES += \
     mobiledata.interfaces=pdp0,wlan0,gprs,ppp0 \
     ro.telephony.ril_class=SamsungOmap4RIL
-
-PRODUCT_PACKAGES += \
-    libsecril-client
 
 # These are the hardware-specific features
 PRODUCT_COPY_FILES += \
