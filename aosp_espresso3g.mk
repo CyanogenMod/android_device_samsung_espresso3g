@@ -23,8 +23,8 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 # Inherit device specific configuration
 $(call inherit-product, device/samsung/espresso3g/device.mk)
 
-PRODUCT_DEVICE := espresso3g
 PRODUCT_NAME := aosp_espresso3g
+PRODUCT_DEVICE := espresso3g
 PRODUCT_BRAND := Android
 PRODUCT_MODEL := Galaxy Tab 2 3G
 PRODUCT_MANUFACTURER := Samsung
