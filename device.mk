@@ -35,6 +35,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 PRODUCT_PACKAGES += \
     libsecril-client \
+    libsecril-shim \
     libsecnativefeature
 
 # These are the hardware-specific features

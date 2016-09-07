@@ -1,0 +1,24 @@
+#ifndef __SECRIL_SHIM_H__
+#define __SECRIL_SHIM_H__
+
+#define LOG_TAG "secril-shim"
+#define RIL_SHLIB
+
+#include <dlfcn.h>
+#include <inttypes.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include <cutils/compiler.h>
+#include <cutils/properties.h>
+#include <sys/cdefs.h>
+#include <telephony/ril.h>
+#include <utils/Log.h>
+
+#define RIL_LIB_PATH "/vendor/lib/libsec-ril.so"
+
+extern const char * requestToString(int request);
+
+#endif /* __SECRIL_SHIM_H__ */
