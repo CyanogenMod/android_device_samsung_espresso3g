@@ -21,4 +21,19 @@
 
 extern const char * requestToString(int request);
 
+/* TODO: Do we really need to redefine these? They aren't in a header... */
+typedef struct {
+    int requestNumber;
+    void (*dispatchFunction) (void *p, void *pRI);
+    int(*responseFunction) (void *p, void *response, size_t responselen);
+} CommandInfo;
+
+typedef struct RequestInfo {
+    int32_t token;
+    CommandInfo *pCI;
+    struct RequestInfo *p_next;
+    char cancelled;
+    char local;
+} RequestInfo;
+
 #endif /* __SECRIL_SHIM_H__ */
