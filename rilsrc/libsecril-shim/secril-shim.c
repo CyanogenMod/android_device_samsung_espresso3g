@@ -119,6 +119,13 @@ static void onRequestCompleteShim(RIL_Token t, RIL_Errno e, void *response, size
 	request = pRI->pCI->requestNumber;
 
 	switch (request) {
+		case RIL_REQUEST_LAST_CALL_FAIL_CAUSE:
+			/* Remove extra element (ignored on pre-M, now crashing the framework) */
+			if (responselen > sizeof(int)) {
+				rilEnv->OnRequestComplete(t, e, response, sizeof(int));
+				return;
+			}
+			break;
 		case RIL_REQUEST_QUERY_AVAILABLE_NETWORKS:
 			/* Remove the extra (unused) element from the operator info, freaking out the framework.
 			 * Formerly, this is know as the mQANElements override. */
