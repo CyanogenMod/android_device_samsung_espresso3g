@@ -1,3 +1,0 @@
-# RIL
-BOARD_VENDOR := samsung
-BOARD_MODEM_TYPE := xmm6260
