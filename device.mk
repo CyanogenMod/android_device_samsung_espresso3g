@@ -35,7 +35,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.telephony.ril_class=SamsungExynos4RIL
 
 PRODUCT_PACKAGES += \
-    libsecril-client
+    libsecril-client \
+    libsecnativefeature
 
 # These are the hardware-specific features
 PRODUCT_COPY_FILES += \
