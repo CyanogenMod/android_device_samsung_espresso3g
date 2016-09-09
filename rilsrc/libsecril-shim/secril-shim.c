@@ -12,6 +12,15 @@ static void onRequestShim(int request, void *data, size_t datalen, RIL_Token t)
 	origRilFunctions->onRequest(request, data, datalen, t);
 }
 
+static void fixupDataCallList(void *response, size_t responselen) {
+	RIL_Data_Call_Response_v6 *p_cur = (RIL_Data_Call_Response_v6 *) response;
+	int num = responselen / sizeof(RIL_Data_Call_Response_v6);
+
+	int i;
+	for (i = 0; i < num; ++i)
+		p_cur[i].gateways = p_cur[i].addresses;
+}
+
 static void onCompleteQueryAvailableNetworks(RIL_Token t, RIL_Errno e, void *response, size_t responselen) {
 	/* Response is a char **, pointing to an array of char *'s */
 	size_t numStrings = responselen / sizeof(char *);
@@ -72,6 +81,16 @@ static void onRequestCompleteShim(RIL_Token t, RIL_Errno e, void *response, size
 	request = pRI->pCI->requestNumber;
 
 	switch (request) {
+		case RIL_REQUEST_DATA_CALL_LIST:
+		case RIL_REQUEST_SETUP_DATA_CALL:
+			/* According to the Samsung RIL, the addresses are the gateways?
+			 * This fixes mobile data. */
+			if (response != NULL && responselen != 0 && (responselen % sizeof(RIL_Data_Call_Response_v6) == 0)) {
+				fixupDataCallList(response, responselen);
+				rilEnv->OnRequestComplete(t, e, response, responselen);
+				return;
+			}
+			break;
 		case RIL_REQUEST_QUERY_AVAILABLE_NETWORKS:
 			/* Remove the extra (unused) element from the operator info, freaking out the framework.
 			 * Formerly, this is know as the mQANElements override. */
@@ -98,6 +117,12 @@ null_token_exit:
 static void onUnsolicitedResponseShim(int unsolResponse, const void *data, size_t datalen)
 {
 	switch (unsolResponse) {
+		case RIL_UNSOL_DATA_CALL_LIST_CHANGED:
+			/* According to the Samsung RIL, the addresses are the gateways?
+			 * This fixes mobile data. */
+			if (data != NULL && datalen != 0 && (datalen % sizeof(RIL_Data_Call_Response_v6) == 0))
+				fixupDataCallList((void*) data, datalen);
+			break;
 		case RIL_UNSOL_SIGNAL_STRENGTH:
 			/* The Samsung RIL reports the signal strength in a strange way... */
 			if (data != NULL && datalen >= sizeof(RIL_SignalStrength_v5))
