@@ -84,6 +84,28 @@ static void onCompleteQueryAvailableNetworks(RIL_Token t, RIL_Errno e, void *res
 	free(newResponse);
 }
 
+static void fixupSignalStrength(void *response, size_t responselen) {
+	int gsmSignalStrength;
+
+	RIL_SignalStrength_v10 *p_cur = ((RIL_SignalStrength_v10 *) response);
+
+	gsmSignalStrength = p_cur->GW_SignalStrength.signalStrength & 0xFF;
+
+	if (gsmSignalStrength < 0 ||
+		(gsmSignalStrength > 31 && p_cur->GW_SignalStrength.signalStrength != 99)) {
+		gsmSignalStrength = p_cur->CDMA_SignalStrength.dbm;
+	}
+
+	/* Fix GSM signal strength */
+	p_cur->GW_SignalStrength.signalStrength = gsmSignalStrength;
+
+	/* We don't support LTE - values should be set to INT_MAX */
+	p_cur->LTE_SignalStrength.cqi = INT_MAX;
+	p_cur->LTE_SignalStrength.rsrp = INT_MAX;
+	p_cur->LTE_SignalStrength.rsrq = INT_MAX;
+	p_cur->LTE_SignalStrength.rssnr = INT_MAX;
+}
+
 static void onRequestCompleteShim(RIL_Token t, RIL_Errno e, void *response, size_t responselen) {
 	int request;
 	RequestInfo *pRI;
@@ -105,11 +127,32 @@ static void onRequestCompleteShim(RIL_Token t, RIL_Errno e, void *response, size
 				return;
 			}
 			break;
+		case RIL_REQUEST_SIGNAL_STRENGTH:
+			/* The Samsung RIL reports the signal strength in a strange way... */
+			if (response != NULL && responselen >= sizeof(RIL_SignalStrength_v5)) {
+				fixupSignalStrength(response, responselen);
+				rilEnv->OnRequestComplete(t, e, response, responselen);
+				return;
+			}
+			break;
 	}
 
 	RLOGD("%s: got request %s: forwarded to libril.\n", __func__, requestToString(request));
 null_token_exit:
 	rilEnv->OnRequestComplete(t, e, response, responselen);
+}
+
+static void onUnsolicitedResponseShim(int unsolResponse, const void *data, size_t datalen)
+{
+	switch (unsolResponse) {
+		case RIL_UNSOL_SIGNAL_STRENGTH:
+			/* The Samsung RIL reports the signal strength in a strange way... */
+			if (data != NULL && datalen >= sizeof(RIL_SignalStrength_v5))
+				fixupSignalStrength((void*) data, datalen);
+			break;
+	}
+
+	rilEnv->OnUnsolicitedResponse(unsolResponse, data, datalen);
 }
 
 const RIL_RadioFunctions* RIL_Init(const struct RIL_Env *env, int argc, char **argv)
@@ -123,6 +166,7 @@ const RIL_RadioFunctions* RIL_Init(const struct RIL_Env *env, int argc, char **a
 	rilEnv = env;
 	shimmedEnv = *env;
 	shimmedEnv.OnRequestComplete = onRequestCompleteShim;
+	shimmedEnv.OnUnsolicitedResponse = onUnsolicitedResponseShim;
 
 	/* Open and Init the original RIL. */
 
