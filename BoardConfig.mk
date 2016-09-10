@@ -27,7 +27,6 @@ TARGET_OTA_ASSERT_DEVICE := espresso3g,espresso-common,p3100,GT-P3100,espressorf
 # RIL
 BOARD_PROVIDES_LIBRIL := true
 BOARD_RIL_CLASS := ../../../device/samsung/espresso3g/ril
-COMMON_GLOBAL_CFLAGS += -DDISABLE_ASHMEM_TRACKING
 
 # SELinux
 BOARD_SEPOLICY_DIRS += \
