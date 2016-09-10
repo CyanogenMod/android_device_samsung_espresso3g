@@ -12,6 +12,28 @@ static void onRequestShim(int request, void *data, size_t datalen, RIL_Token t)
 	origRilFunctions->onRequest(request, data, datalen, t);
 }
 
+static void onCompleteRequestGetSimStatus(RIL_Token t, RIL_Errno e, void *response) {
+	/* While at it, upgrade the response to RIL_CardStatus_v6 */
+	RIL_CardStatus_v5_samsung *p_cur = ((RIL_CardStatus_v5_samsung *) response);
+	RIL_CardStatus_v6 *v6response = malloc(sizeof(RIL_CardStatus_v6));
+
+	v6response->card_state = p_cur->card_state;
+	v6response->universal_pin_state = p_cur->universal_pin_state;
+	v6response->gsm_umts_subscription_app_index = p_cur->gsm_umts_subscription_app_index;
+	v6response->cdma_subscription_app_index = p_cur->cdma_subscription_app_index;
+	v6response->ims_subscription_app_index = -1;
+	v6response->num_applications = p_cur->num_applications;
+
+	int i;
+	for (i = 0; i < RIL_CARD_MAX_APPS; ++i)
+		memcpy(&v6response->applications[i], &p_cur->applications[i], sizeof(RIL_AppStatus));
+
+	/* Send the fixed response to libril */
+	rilEnv->OnRequestComplete(t, e, v6response, sizeof(RIL_CardStatus_v6));
+
+	free(v6response);
+}
+
 static void fixupDataCallList(void *response, size_t responselen) {
 	RIL_Data_Call_Response_v6 *p_cur = (RIL_Data_Call_Response_v6 *) response;
 	int num = responselen / sizeof(RIL_Data_Call_Response_v6);
@@ -81,6 +103,13 @@ static void onRequestCompleteShim(RIL_Token t, RIL_Errno e, void *response, size
 	request = pRI->pCI->requestNumber;
 
 	switch (request) {
+		case RIL_REQUEST_GET_SIM_STATUS:
+			/* Remove unused extra elements from RIL_AppStatus */
+			if (response != NULL && responselen == sizeof(RIL_CardStatus_v5_samsung)) {
+				onCompleteRequestGetSimStatus(t, e, response);
+				return;
+			}
+			break;
 		case RIL_REQUEST_DATA_CALL_LIST:
 		case RIL_REQUEST_SETUP_DATA_CALL:
 			/* According to the Samsung RIL, the addresses are the gateways?
