@@ -12,6 +12,3 @@
 
 # Radio Data
 /data/misc/radio(/.*)?                      u:object_r:radio_data:s0
-
-# Block devices
-/dev/block/platform/omap/omap_hsmmc.1/by-name/MODEM    u:object_r:radio_device:s0
