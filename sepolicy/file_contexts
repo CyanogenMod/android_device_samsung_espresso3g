@@ -9,6 +9,3 @@
 /dev/umts_rfs0                              u:object_r:radio_device:s0
 /dev/umts_router                            u:object_r:radio_device:s0
 /dev/__cbd_msg_                             u:object_r:cbd_device:s0
-
-# Block devices
-/dev/block/platform/omap/omap_hsmmc.1/by-name/MODEM    u:object_r:radio_device:s0
