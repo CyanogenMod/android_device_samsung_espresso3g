@@ -6,8 +6,39 @@ static const RIL_RadioFunctions *origRilFunctions;
 /* A copy of the ril environment passed to RIL_Init. */
 static const struct RIL_Env *rilEnv;
 
+static void onRequestDial(int request, void *data, size_t datalen, RIL_Token t) {
+	RIL_Dial *dial = malloc(sizeof(RIL_Dial));
+	RIL_UUS_Info *uusInfo = malloc(sizeof(RIL_UUS_Info));
+
+	memcpy(dial, data, datalen);
+
+	if (dial->uusInfo == NULL) {
+		memset(uusInfo, 0, sizeof(RIL_UUS_Info));
+		uusInfo->uusType = (RIL_UUS_Type) 0;
+		uusInfo->uusDcs = (RIL_UUS_DCS) 0;
+		uusInfo->uusData = NULL;
+		uusInfo->uusLength = 0;
+		dial->uusInfo = uusInfo;
+	}
+
+	origRilFunctions->onRequest(request, dial, sizeof(RIL_Dial), t);
+
+	free(uusInfo);
+	free(dial);
+}
+
 static void onRequestShim(int request, void *data, size_t datalen, RIL_Token t)
 {
+	switch (request) {
+		/* The Samsung RIL crashes if uusInfo is NULL... */
+		case RIL_REQUEST_DIAL:
+			if (datalen == sizeof(RIL_Dial) && data != NULL) {
+				onRequestDial(request, data, datalen, t);
+				return;
+			}
+			break;
+	}
+
 	RLOGD("%s: got request %s: forwarded to RIL.\n", __func__, requestToString(request));
 	origRilFunctions->onRequest(request, data, datalen, t);
 }
