@@ -8,6 +8,8 @@ LOCAL_MODULE_TAGS := optional
 LOCAL_SRC_FILES:= \
     secril-client.cpp
 
+LOCAL_CFLAGS := -Wall -Werror
+
 LOCAL_SHARED_LIBRARIES := \
     libutils \
     libbinder \
