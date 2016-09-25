@@ -8,7 +8,8 @@ LOCAL_SRC_FILES := \
 	SecNativeFeatureCppIf.cpp
 
 LOCAL_C_INCLUDES += \
-	external/expat/lib
+	external/expat/lib \
+	external/libcxx/include
 
 LOCAL_SHARED_LIBRARIES := \
 	libexpat
