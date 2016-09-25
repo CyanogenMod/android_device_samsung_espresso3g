@@ -41,7 +41,7 @@ charDataHandler(void *userData, const char *s, int len){
 }
 
 static void XMLCALL
-startElement(void *userData, const char *name, const char **atts)
+startElement(void *userData, const char *name, const char **atts __unused)
 {
 	ParserUserData* pData = (ParserUserData*)userData;
 	pData->curr_name.assign(name);
@@ -49,7 +49,7 @@ startElement(void *userData, const char *name, const char **atts)
 }
 
 static void XMLCALL
-endElement(void *userData, const char *name)
+endElement(void *userData, const char *name __unused)
 {
 	ParserUserData* pData = (ParserUserData*)userData;
 	pData->curr_name.clear();
