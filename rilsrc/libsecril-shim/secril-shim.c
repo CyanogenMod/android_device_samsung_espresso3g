@@ -6,25 +6,23 @@ static const RIL_RadioFunctions *origRilFunctions;
 /* A copy of the ril environment passed to RIL_Init. */
 static const struct RIL_Env *rilEnv;
 
-static void onRequestDial(int request, void *data, size_t datalen, RIL_Token t) {
-	RIL_Dial *dial = malloc(sizeof(RIL_Dial));
-	RIL_UUS_Info *uusInfo = malloc(sizeof(RIL_UUS_Info));
+static void onRequestDial(int request, void *data, RIL_Token t) {
+	RIL_Dial dial;
+	RIL_UUS_Info uusInfo;
 
-	memcpy(dial, data, datalen);
+	dial.address = ((RIL_Dial *) data)->address;
+	dial.clir = ((RIL_Dial *) data)->clir;
+	dial.uusInfo = ((RIL_Dial *) data)->uusInfo;
 
-	if (dial->uusInfo == NULL) {
-		memset(uusInfo, 0, sizeof(RIL_UUS_Info));
-		uusInfo->uusType = (RIL_UUS_Type) 0;
-		uusInfo->uusDcs = (RIL_UUS_DCS) 0;
-		uusInfo->uusData = NULL;
-		uusInfo->uusLength = 0;
-		dial->uusInfo = uusInfo;
+	if (dial.uusInfo == NULL) {
+		uusInfo.uusType = (RIL_UUS_Type) 0;
+		uusInfo.uusDcs = (RIL_UUS_DCS) 0;
+		uusInfo.uusData = NULL;
+		uusInfo.uusLength = 0;
+		dial.uusInfo = &uusInfo;
 	}
 
-	origRilFunctions->onRequest(request, dial, sizeof(RIL_Dial), t);
-
-	free(uusInfo);
-	free(dial);
+	origRilFunctions->onRequest(request, &dial, sizeof(dial), t);
 }
 
 static void onRequestShim(int request, void *data, size_t datalen, RIL_Token t)
@@ -33,7 +31,7 @@ static void onRequestShim(int request, void *data, size_t datalen, RIL_Token t)
 		/* The Samsung RIL crashes if uusInfo is NULL... */
 		case RIL_REQUEST_DIAL:
 			if (datalen == sizeof(RIL_Dial) && data != NULL) {
-				onRequestDial(request, data, datalen, t);
+				onRequestDial(request, data, t);
 				return;
 			}
 			break;
@@ -46,23 +44,21 @@ static void onRequestShim(int request, void *data, size_t datalen, RIL_Token t)
 static void onCompleteRequestGetSimStatus(RIL_Token t, RIL_Errno e, void *response) {
 	/* While at it, upgrade the response to RIL_CardStatus_v6 */
 	RIL_CardStatus_v5_samsung *p_cur = ((RIL_CardStatus_v5_samsung *) response);
-	RIL_CardStatus_v6 *v6response = malloc(sizeof(RIL_CardStatus_v6));
+	RIL_CardStatus_v6 v6response;
 
-	v6response->card_state = p_cur->card_state;
-	v6response->universal_pin_state = p_cur->universal_pin_state;
-	v6response->gsm_umts_subscription_app_index = p_cur->gsm_umts_subscription_app_index;
-	v6response->cdma_subscription_app_index = p_cur->cdma_subscription_app_index;
-	v6response->ims_subscription_app_index = -1;
-	v6response->num_applications = p_cur->num_applications;
+	v6response.card_state = p_cur->card_state;
+	v6response.universal_pin_state = p_cur->universal_pin_state;
+	v6response.gsm_umts_subscription_app_index = p_cur->gsm_umts_subscription_app_index;
+	v6response.cdma_subscription_app_index = p_cur->cdma_subscription_app_index;
+	v6response.ims_subscription_app_index = -1;
+	v6response.num_applications = p_cur->num_applications;
 
 	int i;
 	for (i = 0; i < RIL_CARD_MAX_APPS; ++i)
-		memcpy(&v6response->applications[i], &p_cur->applications[i], sizeof(RIL_AppStatus));
+		memcpy(&v6response.applications[i], &p_cur->applications[i], sizeof(RIL_AppStatus));
 
 	/* Send the fixed response to libril */
-	rilEnv->OnRequestComplete(t, e, v6response, sizeof(RIL_CardStatus_v6));
-
-	free(v6response);
+	rilEnv->OnRequestComplete(t, e, &v6response, sizeof(RIL_CardStatus_v6));
 }
 
 static void fixupDataCallList(void *response, size_t responselen) {
