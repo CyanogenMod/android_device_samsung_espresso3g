@@ -25,10 +25,6 @@ PRODUCT_COPY_FILES += \
     device/samsung/espresso3g/audio/tiny_hw_espresso.xml:system/etc/sound/espresso \
     device/samsung/espresso3g/audio/tiny_hw_espresso10.xml:system/etc/sound/espresso10
 
-# Packages
-PRODUCT_PACKAGES += \
-    SamsungServiceMode
-
 # RIL
 PRODUCT_PROPERTY_OVERRIDES += \
     mobiledata.interfaces=pdp0,wlan0,gprs,ppp0

@@ -30,3 +30,7 @@ $(call inherit-product, device/samsung/espresso3g/aosp_espresso3g.mk)
 
 # Device identifier. This must come after all inclusions
 PRODUCT_NAME := cm_espresso3g
+
+# Packages
+PRODUCT_PACKAGES += \
+    SamsungServiceMode
