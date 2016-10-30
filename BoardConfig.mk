@@ -23,6 +23,3 @@ TARGET_OTA_ASSERT_DEVICE := espresso3g,espresso-common,p3100,GT-P3100,espressorf
 # SELinux
 BOARD_SEPOLICY_DIRS += \
     device/samsung/espresso3g/sepolicy
-
-# Use the non-open-source parts, if they're present
--include vendor/samsung/espresso3g/BoardConfigVendor.mk

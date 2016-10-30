@@ -11,6 +11,3 @@ allow cpboot-daemon { block_device efs_file }:dir search;
 unix_socket_connect(cpboot-daemon, property, init)
 
 allow cpboot-daemon radio_prop:property_service set;
-
-# neverallow failures - FIX ME if needed
-# allow cpboot-daemon self:capability mknod;

@@ -18,7 +18,7 @@
 $(call inherit-product-if-exists, frameworks/base/data/sounds/AudioPackage13.mk)
 
 # Inherit from the common Open Source product configuration
-$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base_telephony.mk)
 
 # Inherit device specific configuration
 $(call inherit-product, device/samsung/espresso3g/device.mk)
